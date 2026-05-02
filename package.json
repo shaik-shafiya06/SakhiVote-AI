@@ -1,0 +1,19 @@
+{
+  "name": "sakhivote-ai",
+  "version": "1.0.0",
+  "description": "Creating an assistant that helps users understand the election process, timelines, and steps in an interactive and easy-to-follow way. Especially targeted for first-time voters, rural users, and low-literacy users.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}

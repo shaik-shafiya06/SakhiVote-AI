@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SakhiVote AI - A voice-first, multilingual election assistant for first-time and rural voters.">
+    <title>SakhiVote AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+    <div id="accessibility-bar">
+        <button id="btn-theme" title="Toggle Dark Mode" aria-label="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+        <button id="btn-text-size" title="Toggle Text Size" aria-label="Toggle Text Size"><i class="fas fa-text-height"></i></button>
+        <button id="btn-contrast" title="Toggle High Contrast" aria-label="Toggle High Contrast"><i class="fas fa-adjust"></i></button>
+    </div>
+
+    <div id="app-container">
+        <!-- Dynamic content injected here -->
+    </div>
+
+    <div id="chat-overlay" class="hidden">
+        <div id="chat-messages"></div>
+    </div>
+
+    <button id="btn-mic" class="floating-mic pulse" aria-label="Voice Input">
+        <i class="fas fa-microphone"></i>
+    </button>
+    
+    <button id="btn-replay" class="floating-replay hidden" aria-label="Replay Voice">
+        <i class="fas fa-volume-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
