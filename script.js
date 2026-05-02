@@ -305,7 +305,7 @@ window.voteAction = function() {
     showChatBubble(getText('votedMsg'), 'assistant');
 }
 
-// TTS Setup (ADVANCED MULTILINGUAL VOICE SYSTEM - 100% FREE)
+// TTS Setup (ADVANCED MULTILINGUAL VOICE SYSTEM - GOOGLE CLOUD TTS)
 async function speak(text, overrideLang) {
     // 1. Stop previous audio
     if (appState.currentAudio) {
@@ -314,33 +314,45 @@ async function speak(text, overrideLang) {
     }
 
     const lang = overrideLang || appState.language;
-    
-    // Google Translate expects 'te' instead of 'te-IN' for regional languages
-    const gLang = lang.split('-')[0];
 
     // Optional: Add loading indicator on mic
     if (micBtn) micBtn.classList.add('mic-active');
 
     try {
-        // We use the unofficial, free Google Translate TTS endpoint
-        // 'client=tw-ob' bypasses the token requirement
-        const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${gLang}&q=${encodeURIComponent(text)}`;
+        // Use our server-side Google Cloud TTS endpoint
+        const response = await fetch('/speak', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, lang })
+        });
         
-        appState.currentAudio = new Audio(url);
-        
-        // Handle quick mode playback rate
-        if (appState.mode === 'quick') {
-            appState.currentAudio.playbackRate = 1.2;
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`TTS request failed: ${errorText}`);
         }
 
-        await appState.currentAudio.play();
+        const data = await response.json();
         
-        appState.currentAudio.onended = () => {
-            if (micBtn && !appState.isListening) {
-                micBtn.classList.remove('mic-active');
+        if (data.audioContent) {
+            const audioUrl = `data:audio/mp3;base64,${data.audioContent}`;
+            appState.currentAudio = new Audio(audioUrl);
+            
+            // Handle quick mode playback rate
+            if (appState.mode === 'quick') {
+                appState.currentAudio.playbackRate = 1.2;
             }
-            resetInactivityTimer();
-        };
+
+            await appState.currentAudio.play();
+            
+            appState.currentAudio.onended = () => {
+                if (micBtn && !appState.isListening) {
+                    micBtn.classList.remove('mic-active');
+                }
+                resetInactivityTimer();
+            };
+        } else {
+            throw new Error('No audio content received');
+        }
     } catch (e) {
         console.error("Failed to fetch speech audio:", e);
         if (micBtn && !appState.isListening) {
